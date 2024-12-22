@@ -1,35 +1,51 @@
 from abc import ABC, abstractmethod
 
-# Абстрактный продукт
-class Product(ABC):
+# Абстрактный анализатор
+class TextAnalyzer(ABC):
     @abstractmethod
-    def operation(self):
+    def analyze(self, text: str):
         pass
 
-# Конкретный продукт
-class ConcreteProductA(Product):
-    def operation(self):
-        return "Product A"
+# Конкретные анализаторы
+class WordCountAnalyzer(TextAnalyzer):
+    def analyze(self, text: str):
+        return len(text.split())
 
-class ConcreteProductB(Product):
-    def operation(self):
-        return "Product B"
+class CharCountAnalyzer(TextAnalyzer):
+    def analyze(self, text: str):
+        return len(text)
+
+class UniqueWordAnalyzer(TextAnalyzer):
+    def analyze(self, text: str):
+        return len(set(text.split()))
 
 # Абстрактный создатель
-class Creator(ABC):
+class AnalyzerFactory(ABC):
     @abstractmethod
-    def factory_method(self) -> Product:
+    def create_analyzer(self) -> TextAnalyzer:
         pass
 
-    def some_operation(self) -> str:
-        product = self.factory_method()
-        return f"Creator: Работает с {product.operation()}"
+# Конкретные создатели
+class WordCountFactory(AnalyzerFactory):
+    def create_analyzer(self) -> TextAnalyzer:
+        return WordCountAnalyzer()
 
-# Конкретный создатель
-class ConcreteCreatorA(Creator):
-    def factory_method(self) -> Product:
-        return ConcreteProductA()
+class CharCountFactory(AnalyzerFactory):
+    def create_analyzer(self) -> TextAnalyzer:
+        return CharCountAnalyzer()
 
-class ConcreteCreatorB(Creator):
-    def factory_method(self) -> Product:
-        return ConcreteProductB()
+class UniqueWordFactory(AnalyzerFactory):
+    def create_analyzer(self) -> TextAnalyzer:
+        return UniqueWordAnalyzer()
+
+# Использование
+def main():
+    text = "This is an example text with some repeated words."
+
+    factories = [WordCountFactory(), CharCountFactory(), UniqueWordFactory()]
+    for factory in factories:
+        analyzer = factory.create_analyzer()
+        print(f"{analyzer.__class__.__name__}: {analyzer.analyze(text)}")
+
+if __name__ == "__main__":
+    main()
