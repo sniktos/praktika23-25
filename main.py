@@ -1,51 +1,17 @@
-from abc import ABC, abstractmethod
+def word_count(text):
+    return len(text.split())
 
-# Абстрактный анализатор
-class TextAnalyzer(ABC):
-    @abstractmethod
-    def analyze(self, text: str):
-        pass
+def char_count(text):
+    return len(text)
 
-# Конкретные анализаторы
-class WordCountAnalyzer(TextAnalyzer):
-    def analyze(self, text: str):
-        return len(text.split())
+def unique_word_count(text):
+    return len(set(text.split()))
 
-class CharCountAnalyzer(TextAnalyzer):
-    def analyze(self, text: str):
-        return len(text)
-
-class UniqueWordAnalyzer(TextAnalyzer):
-    def analyze(self, text: str):
-        return len(set(text.split()))
-
-# Абстрактный создатель
-class AnalyzerFactory(ABC):
-    @abstractmethod
-    def create_analyzer(self) -> TextAnalyzer:
-        pass
-
-# Конкретные создатели
-class WordCountFactory(AnalyzerFactory):
-    def create_analyzer(self) -> TextAnalyzer:
-        return WordCountAnalyzer()
-
-class CharCountFactory(AnalyzerFactory):
-    def create_analyzer(self) -> TextAnalyzer:
-        return CharCountAnalyzer()
-
-class UniqueWordFactory(AnalyzerFactory):
-    def create_analyzer(self) -> TextAnalyzer:
-        return UniqueWordAnalyzer()
-
-# Использование
 def main():
     text = "This is an example text with some repeated words."
-
-    factories = [WordCountFactory(), CharCountFactory(), UniqueWordFactory()]
-    for factory in factories:
-        analyzer = factory.create_analyzer()
-        print(f"{analyzer.__class__.__name__}: {analyzer.analyze(text)}")
+    print(f"Word count: {word_count(text)}")
+    print(f"Character count: {char_count(text)}")
+    print(f"Unique word count: {unique_word_count(text)}")
 
 if __name__ == "__main__":
     main()
